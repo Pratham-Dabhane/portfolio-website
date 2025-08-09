@@ -92,14 +92,13 @@ export default function About() {
           className="mb-16"
         >
           <p className="text-lg text-secondary-600 leading-relaxed mb-6">
-            I'm a passionate software engineer with a love for creating elegant, user-centric solutions. 
-            With expertise in modern web technologies, I specialize in building scalable applications 
-            that solve real-world problems.
+            I’m a passionate AI and Data Science engineer, driven to design intelligent, user-focused solutions.
+             With expertise in machine learning, deep learning, and data-driven systems, I specialize in building scalable,
+              impactful applications that solve real-world problems.
           </p>
           <p className="text-lg text-secondary-600 leading-relaxed">
-            When I'm not coding, you can find me exploring new technologies, contributing to open-source 
-            projects, or sharing knowledge with the developer community. I believe in continuous learning 
-            and staying up-to-date with the latest industry trends.
+            When I’m not building AI models or diving into datasets, I’m exploring emerging technologies
+             and sharing insights with the tech community. I believe in continuous learning and staying ahead of the curve in the fast-evolving AI landscape.
           </p>
         </motion.div>
 

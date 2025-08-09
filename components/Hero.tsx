@@ -75,11 +75,11 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.6 }}
         >
           <h2 className="text-2xl sm:text-3xl font-semibold text-secondary-700 mb-6">
-            Software Engineer & Developer
+            AI & DS Engineer & Developer
           </h2>
           <p className="text-lg text-secondary-600 max-w-2xl mx-auto leading-relaxed">
-            I create elegant solutions to complex problems, building scalable web applications 
-            that deliver exceptional user experiences.
+            I craft intelligent, data-driven solutions to complex challenges, 
+            building scalable AI-powered applications that deliver exceptional real-world impact.
           </p>
         </motion.div>
 
