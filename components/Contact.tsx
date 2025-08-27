@@ -135,7 +135,7 @@ export default function Contact() {
               <div>
                 <h3 className="font-semibold text-secondary-800">Phone</h3>
                 <a href="tel:+919876543210" className="text-primary-600 hover:text-primary-700 transition-colors">
-                  +91 98765 43210
+                  +91 78409 52689
                 </a>
               </div>
             </motion.div>
