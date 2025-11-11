@@ -9,6 +9,15 @@ import Image from 'next/image'
 const projects = [
   {
     id: 1,
+    title: 'AlignCV – AI Resume Enhancer',
+    description: 'A smart AI-powered tool that analyzes resumes and aligns them with specific job descriptions using NLP, offering tailored keyword insights and role-specific suggestions for better ATS compatibility.',
+    image: '/assets/Projects/aligncv.jpg',
+    technologies: ["Python", "LLMs", "Qdrant", "LangChain", "OpenAI API", "Flask", "Vector Databases", "NLP"],
+    liveUrl: 'https://aligncv.streamlit.app/',
+    githubUrl: 'https://github.com/Pratham-Dabhane/AlignCV',
+  },
+  {
+    id: 2,
     title: 'AI Disease Predictor',
     description: 'A machine learning-based web app built with Streamlit that predicts possible diseases based on user-input symptoms. The model is trained on a structured dataset and provides a description of the predicted illness.',
     image: '/assets/Projects/ai-disease-predictor.jpeg',
@@ -17,7 +26,7 @@ const projects = [
     githubUrl: 'https://github.com/Pratham-Dabhane/AI-Disease-Predictor',
   },
   {
-    id: 2,
+    id: 3,
     title: 'Handwritten Digit Recognizer',
     description: 'A Streamlit web app that uses a trained CNN model to recognize digits drawn by users on a canvas in real time.',
     image: '/assets/Projects/handwritten-digit-recognizer.jpg',
@@ -26,7 +35,7 @@ const projects = [
     githubUrl: 'https://github.com/Pratham-Dabhane/Handwritten-Digit-Recognizer',
   },
   {
-    id: 3,
+    id: 4,
     title: 'Customer Segmentation',
     description: 'A data-driven project using K-Means clustering to categorize customers based on purchasing behavior.',
     image: '/assets/Projects/customer-segmentation.jpg',
@@ -35,7 +44,7 @@ const projects = [
     githubUrl: 'https://github.com/Pratham-Dabhane/Customer-Segmentation',
   },
   {
-    id: 4,
+    id: 5,
     title: 'Weather App',
     description: 'A weather application that fetches real-time weather data using OpenWeather API and displays user-friendly results.',
     image: '/assets/Projects/weather-app.jpg',
@@ -44,7 +53,7 @@ const projects = [
     githubUrl: 'https://github.com/Pratham-Dabhane/Weather-App',
   },
   {
-    id: 5,
+    id: 6,
     title: 'Currency Calculator API',
     description: 'A REST API that converts currency values based on real-time exchange rates, returning results in JSON format.',
     image: '/assets/Projects/currency-calculator.jpg',
