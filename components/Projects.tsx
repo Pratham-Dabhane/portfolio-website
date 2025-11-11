@@ -12,7 +12,7 @@ const projects = [
     title: 'AlignCV – AI Resume Enhancer',
     description: 'A smart AI-powered tool that analyzes resumes and aligns them with specific job descriptions using NLP, offering tailored keyword insights and role-specific suggestions for better ATS compatibility.',
     image: '/assets/Projects/aligncv.jpg',
-    technologies: ["Python", "LLMs", "Qdrant", "LangChain", "OpenAI API", "Flask", "Vector Databases", "NLP"],
+    technologies: ["Python", "LLMs", "Qdrant", "LangChain", "GroqAPI", "Flask", "Vector Databases", "NLP"],
     liveUrl: 'https://aligncv.streamlit.app/',
     githubUrl: 'https://github.com/Pratham-Dabhane/AlignCV',
   },
