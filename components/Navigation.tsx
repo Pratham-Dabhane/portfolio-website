@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 
 interface NavigationProps {
@@ -16,7 +16,6 @@ export default function Navigation({ activeSection }: NavigationProps) {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
     }
-
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -38,33 +37,50 @@ export default function Navigation({ activeSection }: NavigationProps) {
 
   return (
     <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        isScrolled
+          ? 'bg-black/60 backdrop-blur-heavy border-b border-white/5'
+          : 'bg-transparent'
       }`}
     >
       <div className="container-max">
-        <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20 px-5 sm:px-8 lg:px-12">
           {/* Logo */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            className="text-2xl font-bold text-primary-600"
+          <motion.button
+            onClick={() => scrollToSection('home')}
+            whileHover={{ scale: 1.03 }}
+            className="font-mono text-xs tracking-[0.3em] uppercase text-muted hover:text-accent transition-colors duration-300"
           >
-            PRATHAM DABHANE
-          </motion.div>
+            Pratham Dabhane
+          </motion.button>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
+          <div className="hidden md:flex items-center gap-10">
+            {navItems.map((item, i) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`nav-link ${
-                  activeSection === item.id ? 'nav-link-active' : ''
-                }`}
+                className="relative group"
               >
-                {item.label}
+                <span
+                  className={`font-mono text-[0.7rem] tracking-[0.2em] uppercase transition-colors duration-300 ${
+                    activeSection === item.id ? 'text-accent' : 'text-muted hover:text-white'
+                  }`}
+                >
+                  <span className="text-dim mr-1">0{i + 1}</span>
+                  {item.label}
+                </span>
+                {/* Active indicator */}
+                {activeSection === item.id && (
+                  <motion.div
+                    layoutId="nav-indicator"
+                    className="absolute -bottom-1 left-0 right-0 h-px bg-accent"
+                    transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                  />
+                )}
               </button>
             ))}
           </div>
@@ -72,37 +88,41 @@ export default function Navigation({ activeSection }: NavigationProps) {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-secondary-100 transition-colors"
+            className="md:hidden p-2 rounded-full border border-white/10 hover:border-accent/50 transition-colors"
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            {isOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
 
         {/* Mobile Navigation */}
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="md:hidden bg-white border-t border-secondary-200"
-          >
-            <div className="px-4 py-4 space-y-2">
-              {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`block w-full text-left px-4 py-2 rounded-lg transition-colors ${
-                    activeSection === item.id
-                      ? 'bg-primary-50 text-primary-600 font-medium'
-                      : 'text-secondary-600 hover:bg-secondary-50'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          </motion.div>
-        )}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="md:hidden overflow-hidden bg-black/90 backdrop-blur-heavy border-t border-white/5"
+            >
+              <div className="px-5 py-6 space-y-1">
+                {navItems.map((item, i) => (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`block w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-mono text-sm tracking-wider ${
+                      activeSection === item.id
+                        ? 'bg-accent/10 text-accent'
+                        : 'text-muted hover:text-white hover:bg-white/5'
+                    }`}
+                  >
+                    <span className="text-dim mr-2">0{i + 1}</span>
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </motion.nav>
   )

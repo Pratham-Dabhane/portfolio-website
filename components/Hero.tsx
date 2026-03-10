@@ -1,146 +1,152 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ChevronDown, Github, Linkedin, Mail, Instagram } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { Github, Linkedin, Mail, Instagram, ArrowDown } from 'lucide-react'
+import { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
 import Image from 'next/image'
 
 export default function Hero() {
-  const [displayText, setDisplayText] = useState('')
-  const fullText = 'PRATHAM'
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const nameRef = useRef<HTMLHeadingElement>(null)
 
   useEffect(() => {
-    if (currentIndex < fullText.length) {
-      const timeout = setTimeout(() => {
-        setDisplayText(prev => prev + fullText[currentIndex])
-        setCurrentIndex(prev => prev + 1)
-      }, 150) // Adjust speed here
-      return () => clearTimeout(timeout)
-    }
-  }, [currentIndex])
+    const ctx = gsap.context(() => {
+      // Split and animate name letters
+      if (nameRef.current) {
+        const text = nameRef.current.textContent || ''
+        nameRef.current.innerHTML = text
+          .split('')
+          .map((char) =>
+            char === ' '
+              ? '<span class="inline-block">&nbsp;</span>'
+              : `<span class="inline-block opacity-0 translate-y-[100px]">${char}</span>`
+          )
+          .join('')
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+        gsap.to(nameRef.current.querySelectorAll('span'), {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.05,
+          ease: 'power4.out',
+          delay: 0.3,
+        })
+      }
+
+      // Stagger other elements
+      gsap.from('.hero-stagger', {
+        opacity: 0,
+        y: 40,
+        duration: 0.9,
+        stagger: 0.15,
+        ease: 'power3.out',
+        delay: 1,
+      })
+    }, containerRef)
+
+    return () => ctx.revert()
+  }, [])
+
+  const socials = [
+    { href: 'https://github.com/Pratham-Dabhane', icon: Github, label: 'GitHub' },
+    { href: 'https://linkedin.com/in/Pratham-Dabhane', icon: Linkedin, label: 'LinkedIn' },
+    { href: 'https://instagram.com/_.pratham.dabhane._', icon: Instagram, label: 'Instagram' },
+    { href: 'mailto:pratham.dabhane.2503@gmail.com', icon: Mail, label: 'Email' },
+  ]
 
   return (
-    <div className="container-max text-center">
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="space-y-8"
-      >
-        {/* Profile Photo with Enhanced Concentric Circles */}
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex justify-center"
-        >
-          <div className="concentric-circles relative">
-            <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden border-4 border-primary-200 shadow-lg relative z-10">
-              <Image
-                src="/assets/Hero/mortyweb_1.png"
-                alt="Pratham Dabhane"
-                width={160}
-                height={160}
-                className="w-full h-full object-cover"
-                priority
-              />
-            </div>
-            {/* Additional larger circles */}
-            <div className="circle-3"></div>
-            <div className="circle-4"></div>
+    <div ref={containerRef} className="container-max w-full px-5 sm:px-8 lg:px-12">
+      <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr] items-center min-h-[80vh] py-20">
+        {/* Left — text */}
+        <div className="space-y-8">
+          <div className="hero-stagger">
+            <span className="label">AI & Data Science Engineer</span>
           </div>
-        </motion.div>
 
-        {/* Name with Typing Effect */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
-          <h1 className="heading-xl text-gradient mb-4">
-            {displayText}
-            <span className="animate-pulse">|</span>
+          <h1
+            ref={nameRef}
+            className="text-[clamp(3rem,8vw,7rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.04em]"
+          >
+            PRATHAM
           </h1>
-        </motion.div>
 
-        {/* Tagline */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-        >
-          <h2 className="text-2xl sm:text-3xl font-semibold text-secondary-700 mb-6">
-            AI & DS Engineer & Developer
-          </h2>
-          <p className="text-lg text-secondary-600 max-w-2xl mx-auto leading-relaxed">
-            I craft intelligent, data-driven solutions to complex challenges, 
+          <p className="hero-stagger text-muted max-w-lg text-base md:text-lg leading-relaxed">
+            I craft intelligent, data-driven solutions to complex challenges,
             building scalable AI-powered applications that deliver exceptional real-world impact.
           </p>
-        </motion.div>
 
-        {/* Call to Action Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-        >
-          <button
-            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-            className="btn-primary"
-          >
-            View My Work
-          </button>
-          <button
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="btn-secondary"
-          >
-            Get In Touch
-          </button>
-        </motion.div>
+          <div className="hero-stagger flex flex-wrap gap-4">
+            <button
+              onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+              className="btn-primary"
+            >
+              View My Work
+            </button>
+            <button
+              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              className="btn-ghost"
+            >
+              Get In Touch
+            </button>
+          </div>
 
-        {/* Social Links */}
+          {/* Socials */}
+          <div className="hero-stagger flex items-center gap-5 pt-4">
+            <span className="label">Connect</span>
+            <div className="w-8 h-px bg-white/20" />
+            {socials.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target={s.href.startsWith('mailto') ? undefined : '_blank'}
+                rel={s.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
+                className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-muted hover:text-accent hover:border-accent transition-all duration-300"
+                aria-label={s.label}
+              >
+                <s.icon className="w-4 h-4" />
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Right — portrait */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
-          className="flex justify-center space-x-6"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.5, ease: 'easeOut' }}
+          className="relative flex justify-center lg:justify-end"
         >
-          <a
-            href="https://github.com/Pratham-Dabhane"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-12 h-12 bg-secondary-100 rounded-lg flex items-center justify-center hover:bg-primary-100 hover:text-primary-600 transition-all duration-200"
-          >
-            <Github className="w-6 h-6" />
-          </a>
-          <a
-            href="https://linkedin.com/in/Pratham-Dabhane"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-12 h-12 bg-secondary-100 rounded-lg flex items-center justify-center hover:bg-primary-100 hover:text-primary-600 transition-all duration-200"
-          >
-            <Linkedin className="w-6 h-6" />
-          </a>
-          <a
-            href="https://instagram.com/_.pratham.dabhane._"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-12 h-12 bg-secondary-100 rounded-lg flex items-center justify-center hover:bg-primary-100 hover:text-primary-600 transition-all duration-200"
-          >
-            <Instagram className="w-6 h-6" />
-          </a>
-          <a
-            href="mailto:pratham.dabhane.2503@gmail.com"
-            className="w-12 h-12 bg-secondary-100 rounded-lg flex items-center justify-center hover:bg-primary-100 hover:text-primary-600 transition-all duration-200"
-          >
-            <Mail className="w-6 h-6" />
-          </a>
+          {/* Glow ring */}
+          <div className="absolute inset-0 m-auto w-56 h-56 sm:w-72 sm:h-72 rounded-full border border-accent/20 animate-pulse-glow" />
+          <div className="absolute inset-0 m-auto w-64 h-64 sm:w-80 sm:h-80 rounded-full border border-white/5" />
+
+          <div className="relative z-10 w-48 h-48 sm:w-60 sm:h-60 rounded-full overflow-hidden border-2 border-white/10 glow-accent">
+            <Image
+              src="/assets/Hero/mortyweb_1.png"
+              alt="Pratham Dabhane"
+              width={240}
+              height={240}
+              className="w-full h-full object-cover"
+              priority
+            />
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2 }}
+        className="flex flex-col items-center gap-2 pb-12"
+      >
+        <span className="label">Scroll</span>
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+        >
+          <ArrowDown className="w-4 h-4 text-muted" />
         </motion.div>
       </motion.div>
     </div>

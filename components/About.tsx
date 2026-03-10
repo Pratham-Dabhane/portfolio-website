@@ -1,8 +1,11 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { useRef } from 'react'
-import { useInView } from 'framer-motion'
+import { useRef, useEffect } from 'react'
+import { motion, useInView } from 'framer-motion'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const skills = [
   { name: 'Python', level: 70, icon: '🐍' },
@@ -15,148 +18,133 @@ const skills = [
 ]
 
 const technologies = [
-  { name: 'Python', icon: '🐍' },
-  { name: 'Git', icon: '📝' },
-  { name: 'NLP', icon: '🗣️' },
-  { name: 'NumPy', icon: '🔢' },
-  { name: 'Pandas', icon: '🐼' },
-  { name: 'Scikit-learn', icon: '📊' },
-  { name: 'OpenCV', icon: '📷' },
-  { name: 'Docker', icon: '🐳' },
-  { name: 'Flask', icon: '🍶' },
-  { name: 'MongoDB', icon: '🍃' },
-  { name: 'PostgreSQL', icon: '🐘' },
-  { name: 'CI/CD', icon: '♾️' },
+  'Python', 'Git', 'NLP', 'NumPy', 'Pandas', 'Scikit-learn',
+  'OpenCV', 'Docker', 'Flask', 'MongoDB', 'PostgreSQL', 'CI/CD',
+  'TensorFlow', 'LangChain', 'FastAPI', 'Streamlit',
 ]
 
 export default function About() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: false, margin: "-100px" })
+  const sectionRef = useRef<HTMLDivElement>(null)
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  }
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Animate skill bars on scroll
+      gsap.utils.toArray<HTMLElement>('.skill-fill').forEach((bar) => {
+        gsap.from(bar, {
+          scaleX: 0,
+          transformOrigin: 'left',
+          duration: 1.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: bar,
+            start: 'top 90%',
+          },
+        })
+      })
+    }, sectionRef)
+    return () => ctx.revert()
+  }, [])
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  }
-
-  const skillVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  }
+  // Double the tech list for seamless marquee
+  const marqueeItems = [...technologies, ...technologies]
 
   return (
-    <div className="container-max">
-      <motion.div
-        ref={ref}
-        variants={containerVariants}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="max-w-4xl mx-auto"
-      >
-        {/* Section Header */}
-        <motion.div
-          variants={itemVariants}
-          className="text-center mb-16"
-        >
-          <h2 className="heading-lg mb-4">About Me</h2>
-          <div className="w-24 h-1 bg-primary-500 mx-auto"></div>
-        </motion.div>
+    <div ref={sectionRef} className="container-max relative">
+      {/* Header */}
+      <div className="reveal-up flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-20">
+        <div>
+          <span className="label block mb-3">About</span>
+          <h2 className="text-[clamp(2.5rem,5vw,3.5rem)] font-bold uppercase tracking-[-0.03em] leading-[1.1]">
+            A bit about<br />
+            <span className="text-accent">who I am</span>
+          </h2>
+        </div>
+        <p className="text-muted max-w-md text-sm md:text-base leading-relaxed">
+          Background, skills, and the technologies I use to bring ideas to life.
+        </p>
+      </div>
 
-        {/* Bio */}
-        <motion.div
-          variants={itemVariants}
-          className="mb-16"
-        >
-          <p className="text-lg text-secondary-600 leading-relaxed mb-6">
-            I’m a passionate AI and Data Science engineer, driven to design intelligent, user-focused solutions.
-             With expertise in machine learning, deep learning, and data-driven systems, I specialize in building scalable,
-              impactful applications that solve real-world problems.
-          </p>
-          <p className="text-lg text-secondary-600 leading-relaxed">
-            When I’m not building AI models or diving into datasets, I’m exploring emerging technologies
-             and sharing insights with the tech community. I believe in continuous learning and staying ahead of the curve in the fast-evolving AI landscape.
-          </p>
-        </motion.div>
+      {/* Bio */}
+      <div className="reveal-up grid md:grid-cols-2 gap-8 mb-24">
+        <p className="text-white/80 leading-relaxed">
+          I&apos;m a passionate AI and Data Science engineer, driven to design intelligent, user-focused solutions.
+          With expertise in machine learning, deep learning, and data-driven systems, I specialize in building scalable,
+          impactful applications that solve real-world problems.
+        </p>
+        <p className="text-white/80 leading-relaxed">
+          When I&apos;m not building AI models or diving into datasets, I&apos;m exploring emerging technologies
+          and sharing insights with the tech community. I believe in continuous learning and staying ahead of the curve in the fast-evolving AI landscape.
+        </p>
+      </div>
 
-        {/* Skills */}
-        <motion.div
-          variants={itemVariants}
-          className="mb-16"
-        >
-          <h3 className="heading-md mb-8 text-center">Skills & Expertise</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {skills.map((skill, index) => (
-              <motion.div
-                key={skill.name}
-                variants={skillVariants}
-                className="bg-secondary-50 p-6 rounded-lg"
+      {/* Tech Marquee */}
+      <div className="mb-24">
+        <div className="flex items-center gap-4 mb-8">
+          <span className="label">Technologies</span>
+          <div className="flex-1 h-px bg-white/10" />
+        </div>
+        <div className="relative overflow-hidden py-6">
+          {/* Fade edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-surface to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-surface to-transparent z-10 pointer-events-none" />
+
+          {/* Row 1 */}
+          <div className="flex animate-marquee whitespace-nowrap mb-4">
+            {marqueeItems.map((tech, i) => (
+              <span
+                key={`r1-${i}`}
+                className="inline-flex items-center mx-3 px-5 py-2.5 rounded-full border border-white/10 bg-white/[0.03] text-sm font-medium text-white/70 hover:border-accent/50 hover:text-accent transition-colors duration-300 whitespace-nowrap"
               >
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center space-x-3">
-                    <span className="text-2xl">{skill.icon}</span>
-                    <span className="font-semibold text-secondary-800">{skill.name}</span>
-                  </div>
-                  <span className="text-sm text-secondary-600">{skill.level}%</span>
-                </div>
-                <div className="w-full bg-secondary-200 rounded-full h-2">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={isInView ? { width: `${skill.level}%` } : { width: 0 }}
-                    transition={{ duration: 1, delay: 0.5 + index * 0.1 }}
-                    className="bg-primary-500 h-2 rounded-full"
-                  />
-                </div>
-              </motion.div>
+                {tech}
+              </span>
             ))}
           </div>
-        </motion.div>
 
-        {/* Technologies */}
-        <motion.div
-          variants={itemVariants}
-        >
-          <h3 className="heading-md mb-8 text-center">Technologies I Work With</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-            {technologies.map((tech, index) => (
-              <motion.div
-                key={tech.name}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.6, delay: 0.8 + index * 0.05 }}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200 border border-secondary-100"
+          {/* Row 2 reversed */}
+          <div className="flex animate-marquee-reverse whitespace-nowrap">
+            {[...marqueeItems].reverse().map((tech, i) => (
+              <span
+                key={`r2-${i}`}
+                className="inline-flex items-center mx-3 px-5 py-2.5 rounded-full border border-white/10 bg-white/[0.03] text-sm font-medium text-white/70 hover:border-accent/50 hover:text-accent transition-colors duration-300 whitespace-nowrap"
               >
-                <span className="text-3xl mb-2">{tech.icon}</span>
-                <span className="text-sm font-medium text-secondary-700 text-center">{tech.name}</span>
-              </motion.div>
+                {tech}
+              </span>
             ))}
           </div>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
+
+      {/* Skills */}
+      <div>
+        <div className="flex items-center gap-4 mb-10">
+          <span className="label">Skill Map</span>
+          <div className="flex-1 h-px bg-white/10" />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {skills.map((skill) => (
+            <motion.div
+              key={skill.name}
+              whileHover={{ y: -4, borderColor: 'rgba(209,255,0,0.3)' }}
+              className="glass-card p-6 transition-all duration-300"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{skill.icon}</span>
+                  <span className="font-semibold text-sm uppercase tracking-wider">{skill.name}</span>
+                </div>
+                <span className="font-mono text-xs text-accent">{skill.level}%</span>
+              </div>
+              <div className="w-full h-1 rounded-full bg-white/10 overflow-hidden">
+                <div
+                  className="skill-fill h-full rounded-full bg-gradient-to-r from-accent to-white/60"
+                  style={{ width: `${skill.level}%` }}
+                />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

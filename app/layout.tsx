@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import SmoothScroll from '@/components/SmoothScroll'
+import Cursor from '@/components/Cursor'
 
 export const metadata: Metadata = {
   title: 'Pratham Dabhane',
@@ -24,14 +26,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en">
       <head>
         <link rel="icon" href="/favicon.jpg" />
         <link rel="shortcut icon" href="/favicon.jpg" />
         <link rel="apple-touch-icon" href="/favicon.jpg" />
       </head>
-      <body className="antialiased">
-        {children}
+      <body className="antialiased bg-bg text-white">
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
+        <Cursor />
       </body>
     </html>
   )
