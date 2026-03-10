@@ -115,21 +115,23 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.5, ease: 'easeOut' }}
-          className="relative flex justify-center lg:justify-end"
+          className="flex justify-center lg:justify-end"
         >
-          {/* Glow ring */}
-          <div className="absolute inset-0 m-auto w-56 h-56 sm:w-72 sm:h-72 rounded-full border border-accent/20 animate-pulse-glow" />
-          <div className="absolute inset-0 m-auto w-64 h-64 sm:w-80 sm:h-80 rounded-full border border-white/5" />
+          <div className="relative w-64 h-64 sm:w-80 sm:h-80">
+            {/* Glow ring */}
+            <div className="absolute inset-0 m-auto w-56 h-56 sm:w-72 sm:h-72 rounded-full border border-accent/20 animate-pulse-glow" />
+            <div className="absolute inset-0 rounded-full border border-white/5" />
 
-          <div className="relative z-10 w-48 h-48 sm:w-60 sm:h-60 rounded-full overflow-hidden border-2 border-white/10 glow-accent">
-            <Image
-              src="/assets/Hero/mortyweb_1.png"
-              alt="Pratham Dabhane"
-              width={240}
-              height={240}
-              className="w-full h-full object-cover"
-              priority
-            />
+            <div className="absolute inset-0 m-auto z-10 w-48 h-48 sm:w-60 sm:h-60 rounded-full overflow-hidden border-2 border-white/10 glow-accent">
+              <Image
+                src="/assets/Hero/mortyweb_1.png"
+                alt="Pratham Dabhane"
+                width={240}
+                height={240}
+                className="w-full h-full object-cover"
+                priority
+              />
+            </div>
           </div>
         </motion.div>
       </div>
