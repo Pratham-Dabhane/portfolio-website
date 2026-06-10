@@ -11,28 +11,28 @@ gsap.registerPlugin(ScrollTrigger)
 
 const projects = [
   {
-  id: 1,
-  title: 'Lectra – AI Study Assistant',
-  description: 'An end-to-end RAG-powered study assistant that enables users to upload documents and receive context-aware answers with cited sources. Features AI-generated flashcards, spaced repetition learning, persistent chat memory, and study analytics for an enhanced learning experience.',
-  image: '/assets/Projects/lectra.jpg',
-  technologies: ['Next.js', 'TypeScript', 'FastAPI', 'Python', 'Pinecone', 'Supabase', 'LangChain', 'GroqAPI', 'RAG'],
-  githubUrl: 'https://github.com/Pratham-Dabhane/Lectra',
+    id: 1,
+    title: 'Lectra – AI Study Assistant',
+    description: 'An end-to-end RAG-powered study assistant that enables users to upload documents and receive context-aware answers with cited sources. Features AI-generated flashcards, spaced repetition learning, persistent chat memory, and study analytics for an enhanced learning experience.',
+    image: '/assets/Projects/lectra.jpg',
+    technologies: ['Next.js', 'TypeScript', 'FastAPI', 'Python', 'Pinecone', 'Supabase', 'LangChain', 'GroqAPI', 'RAG'],
+    githubUrl: 'https://github.com/Pratham-Dabhane/Lectra',
   },
   {
-  id: 2,
-  title: 'Smart Coupons – AI Coupon Optimization Agent',
-  description: 'A hackathon finalist project that leverages AI agents to intelligently discover, rank, and recommend the most relevant coupons based on user behavior, purchase context, and real-time offers, helping maximize savings and engagement.',
-  image: '/assets/Projects/smartcoupons.jpg',
-  technologies: ['Python', 'AI Agents', 'LLMs', 'FastAPI', 'Recommendation Systems', 'Fynd APIs', 'Optimization'],
-  },
-  {
-    id: 3,
+    id: 2,
     title: 'AlignCV – AI Resume Enhancer',
     description: 'A smart AI-powered tool that analyzes resumes and aligns them with specific job descriptions using NLP, offering tailored keyword insights and role-specific suggestions for better ATS compatibility.',
     image: '/assets/Projects/aligncv.jpg',
     technologies: ['Python', 'LLMs', 'Qdrant', 'LangChain', 'GroqAPI', 'Flask', 'Vector Databases', 'NLP'],
     liveUrl: 'https://aligncv.streamlit.app/',
     githubUrl: 'https://github.com/Pratham-Dabhane/AlignCV',
+  },
+  {
+    id: 3,
+    title: 'Smart Coupons – AI Coupon Optimization Agent',
+    description: 'A hackathon finalist project that leverages AI agents to intelligently discover, rank, and recommend the most relevant coupons based on user behavior, purchase context, and real-time offers, helping maximize savings and engagement.',
+    image: '/assets/Projects/smartcoupons.jpg',
+    technologies: ['Python', 'AI Agents', 'LLMs', 'FastAPI', 'Recommendation Systems', 'Fynd APIs', 'Optimization'],
   },
   {
     id: 4,
