@@ -11,7 +11,22 @@ gsap.registerPlugin(ScrollTrigger)
 
 const projects = [
   {
-    id: 1,
+  id: 1,
+  title: 'Lectra – AI Study Assistant',
+  description: 'An end-to-end RAG-powered study assistant that enables users to upload documents and receive context-aware answers with cited sources. Features AI-generated flashcards, spaced repetition learning, persistent chat memory, and study analytics for an enhanced learning experience.',
+  image: '/assets/Projects/lectra.jpg',
+  technologies: ['Next.js', 'TypeScript', 'FastAPI', 'Python', 'Pinecone', 'Supabase', 'LangChain', 'GroqAPI', 'RAG'],
+  githubUrl: 'https://github.com/Pratham-Dabhane/Lectra',
+  },
+  {
+  id: 2,
+  title: 'Smart Coupons – AI Coupon Optimization Agent',
+  description: 'A hackathon finalist project that leverages AI agents to intelligently discover, rank, and recommend the most relevant coupons based on user behavior, purchase context, and real-time offers, helping maximize savings and engagement.',
+  image: '/assets/Projects/smartcoupons.jpg',
+  technologies: ['Python', 'AI Agents', 'LLMs', 'FastAPI', 'Recommendation Systems', 'Fynd APIs', 'Optimization'],
+  },
+  {
+    id: 3,
     title: 'AlignCV – AI Resume Enhancer',
     description: 'A smart AI-powered tool that analyzes resumes and aligns them with specific job descriptions using NLP, offering tailored keyword insights and role-specific suggestions for better ATS compatibility.',
     image: '/assets/Projects/aligncv.jpg',
@@ -20,7 +35,7 @@ const projects = [
     githubUrl: 'https://github.com/Pratham-Dabhane/AlignCV',
   },
   {
-    id: 2,
+    id: 4,
     title: 'AI Disease Predictor',
     description: 'A machine learning-based web app built with Streamlit that predicts possible diseases based on user-input symptoms. The model is trained on a structured dataset and provides a description of the predicted illness.',
     image: '/assets/Projects/ai-disease-predictor.jpeg',
@@ -29,7 +44,7 @@ const projects = [
     githubUrl: 'https://github.com/Pratham-Dabhane/AI-Disease-Predictor',
   },
   {
-    id: 3,
+    id: 5,
     title: 'Handwritten Digit Recognizer',
     description: 'A Streamlit web app that uses a trained CNN model to recognize digits drawn by users on a canvas in real time.',
     image: '/assets/Projects/handwritten-digit-recognizer.jpg',
@@ -38,7 +53,7 @@ const projects = [
     githubUrl: 'https://github.com/Pratham-Dabhane/Handwritten-Digit-Recognizer',
   },
   {
-    id: 4,
+    id: 6,
     title: 'Customer Segmentation',
     description: 'A data-driven project using K-Means clustering to categorize customers based on purchasing behavior.',
     image: '/assets/Projects/customer-segmentation.jpg',
@@ -47,7 +62,7 @@ const projects = [
     githubUrl: 'https://github.com/Pratham-Dabhane/Customer-Segmentation',
   },
   {
-    id: 5,
+    id: 7,
     title: 'Weather App',
     description: 'A weather application that fetches real-time weather data using OpenWeather API and displays user-friendly results.',
     image: '/assets/Projects/weather-app.jpg',
@@ -56,7 +71,7 @@ const projects = [
     githubUrl: 'https://github.com/Pratham-Dabhane/Weather-App',
   },
   {
-    id: 6,
+    id: 8,
     title: 'Currency Calculator API',
     description: 'A REST API that converts currency values based on real-time exchange rates, returning results in JSON format.',
     image: '/assets/Projects/currency-calculator.jpg',
