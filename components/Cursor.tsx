@@ -12,18 +12,23 @@ export default function Cursor() {
     const ring = ringRef.current
     if (!dot || !ring) return
 
-    let mouseX = 0
-    let mouseY = 0
+    // Centre with GSAP xPercent/yPercent, not the CSS translate(-50%,-50%):
+    // gsap.set/to({ x, y }) overwrites the element's transform, so the CSS
+    // centring was lost and the dot/ring sat offset from the real pointer.
+    gsap.set([dot, ring], { xPercent: -50, yPercent: -50 })
+
+    // quickTo reuses one tween per axis instead of creating a new tween
+    // on every mousemove (the old code did gsap.to(ring, ...) per event).
+    const ringX = gsap.quickTo(ring, 'x', { duration: 0.15, ease: 'power2.out' })
+    const ringY = gsap.quickTo(ring, 'y', { duration: 0.15, ease: 'power2.out' })
 
     const moveCursor = (e: MouseEvent) => {
-      mouseX = e.clientX
-      mouseY = e.clientY
-
       // Dot follows instantly
-      gsap.set(dot, { x: mouseX, y: mouseY })
+      gsap.set(dot, { x: e.clientX, y: e.clientY })
 
       // Ring follows with lag
-      gsap.to(ring, { x: mouseX, y: mouseY, duration: 0.15, ease: 'power2.out' })
+      ringX(e.clientX)
+      ringY(e.clientY)
 
       const target = e.target as HTMLElement | null
       if (!target) return

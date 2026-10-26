@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
+import { useLenis } from './SmoothScroll'
 
 interface NavigationProps {
   activeSection: string
@@ -11,12 +12,14 @@ interface NavigationProps {
 export default function Navigation({ activeSection }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const lenis = useLenis()
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
     }
-    window.addEventListener('scroll', handleScroll)
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -30,7 +33,13 @@ export default function Navigation({ activeSection }: NavigationProps) {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
+      // Scroll through Lenis when it is running; native smooth scrolling
+      // fights Lenis and can jump or be ignored. Offset for the fixed nav.
+      if (lenis) {
+        lenis.scrollTo(element, { offset: sectionId === 'home' ? 0 : -80 })
+      } else {
+        element.scrollIntoView({ behavior: 'smooth' })
+      }
     }
     setIsOpen(false)
   }
@@ -63,6 +72,7 @@ export default function Navigation({ activeSection }: NavigationProps) {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
+                aria-current={activeSection === item.id ? 'true' : undefined}
                 className="relative group"
               >
                 <span
@@ -88,6 +98,8 @@ export default function Navigation({ activeSection }: NavigationProps) {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isOpen}
             className="md:hidden p-2 rounded-full border border-white/10 hover:border-accent/50 transition-colors"
           >
             {isOpen ? <X size={18} /> : <Menu size={18} />}
@@ -109,6 +121,7 @@ export default function Navigation({ activeSection }: NavigationProps) {
                   <button
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
+                    aria-current={activeSection === item.id ? 'true' : undefined}
                     className={`block w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-mono text-sm tracking-wider ${
                       activeSection === item.id
                         ? 'bg-accent/10 text-accent'

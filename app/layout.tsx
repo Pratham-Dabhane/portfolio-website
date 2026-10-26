@@ -25,13 +25,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Note: favicon links are declared only via metadata.icons above.
+  // A manual <head> block here used to duplicate them.
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" href="/favicon.jpg" />
-        <link rel="shortcut icon" href="/favicon.jpg" />
-        <link rel="apple-touch-icon" href="/favicon.jpg" />
-      </head>
       <body className="antialiased bg-bg text-white">
         <SmoothScroll>
           {children}
