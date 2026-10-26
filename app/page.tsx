@@ -10,6 +10,7 @@ import Hero from '@/components/Hero'
 import About from '@/components/About'
 import Projects from '@/components/Projects'
 import Contact from '@/components/Contact'
+import { useLenis } from '@/components/SmoothScroll'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -17,9 +18,14 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState('home')
   const [showScrollTop, setShowScrollTop] = useState(false)
   const mainRef = useRef<HTMLElement>(null)
+  const lenis = useLenis()
 
   useEffect(() => {
-    const handleScroll = () => {
+    let rafId = 0
+    let ticking = false
+
+    const update = () => {
+      ticking = false
       const sections = ['home', 'about', 'projects', 'contact']
       const scrollPosition = window.scrollY + 100
       setShowScrollTop(window.scrollY > 500)
@@ -27,7 +33,11 @@ export default function Home() {
       for (const section of sections) {
         const element = document.getElementById(section)
         if (element) {
-          const offsetTop = element.offsetTop
+          // Document offset, not offsetTop: offsetTop is relative to the
+          // nearest positioned ancestor (the `relative` wrapper div),
+          // so it is wrong as soon as that wrapper is not at the top.
+          const offsetTop =
+            element.getBoundingClientRect().top + window.scrollY
           const offsetHeight = element.offsetHeight
           if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
             setActiveSection(section)
@@ -37,8 +47,22 @@ export default function Home() {
       }
     }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    // Throttle layout reads to one per animation frame.
+    const handleScroll = () => {
+      if (!ticking) {
+        ticking = true
+        rafId = requestAnimationFrame(update)
+      }
+    }
+
+    // Run once on mount so a refresh / deep link to #projects highlights
+    // the right section instead of defaulting to Home until first scroll.
+    update()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      cancelAnimationFrame(rafId)
+    }
   }, [])
 
   // GSAP reveal animations for sections
@@ -73,10 +97,15 @@ export default function Home() {
         })
       })
 
-      // Parallax images
+      // Parallax wrappers (see Projects.tsx). GSAP used to animate the
+      // <Image> itself, which overwrote its Tailwind hover scale and left
+      // a gap at the bottom of the card. Now it animates a taller wrapper
+      // around the image, so the image keeps its own hover transform.
+      // Wrapper is 130% tall starting at -15%: animating yPercent between
+      // about -8 and +8 keeps it covering its container at both ends.
       gsap.utils.toArray<HTMLElement>('.parallax-img').forEach((el) => {
-        gsap.to(el, {
-          yPercent: -15,
+        gsap.fromTo(el, { yPercent: -8 }, {
+          yPercent: 8,
           ease: 'none',
           scrollTrigger: {
             trigger: el.parentElement,
@@ -92,7 +121,11 @@ export default function Home() {
   }, [])
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    if (lenis) {
+      lenis.scrollTo(0)
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
   }
 
   return (
@@ -136,15 +169,20 @@ export default function Home() {
         </p>
       </footer>
 
-      {/* Scroll to Top */}
+      {/* Scroll to Top: hidden state must also be non-interactive, or
+          keyboard users can tab to (and click) an invisible button. */}
       <motion.div
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: showScrollTop ? 1 : 0, scale: showScrollTop ? 1 : 0 }}
         transition={{ duration: 0.3 }}
+        aria-hidden={!showScrollTop}
+        style={{ pointerEvents: showScrollTop ? 'auto' : 'none' }}
         className="fixed bottom-8 right-8 z-50"
       >
         <motion.button
           onClick={scrollToTop}
+          aria-label="Scroll to top"
+          tabIndex={showScrollTop ? 0 : -1}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           className="w-12 h-12 rounded-full border border-white/20 bg-white/5 hover:bg-accent hover:text-black hover:border-accent text-white flex items-center justify-center transition-all duration-200 backdrop-blur-heavy"

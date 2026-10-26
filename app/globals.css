@@ -1,9 +1,12 @@
+/* @import must come first: the CSS spec only allows @import before any
+   other rule, and the old order (after @tailwind) only worked because
+   PostCSS hoisted it in the production build. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 /* ── Lenis overrides ── */
 html.lenis, html.lenis body {
@@ -31,6 +34,13 @@ html.lenis, html.lenis body {
     background-color: #000000;
     overflow-x: hidden;
     cursor: none;
+  }
+
+  /* Keep the native text cursor over editable fields: with a global
+     cursor: none users otherwise get no I-beam cue where they type. The
+     custom dot/ring still follows the mouse on top of it. */
+  input, textarea, select {
+    cursor: text;
   }
 
   ::selection {

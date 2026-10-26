@@ -32,8 +32,8 @@ A modern, responsive portfolio website built with Next.js, TypeScript, Tailwind 
 
 1. Clone the repository:
 ```bash
-git clone <your-repo-url>
-cd bitch_ass_portfolio
+git clone https://github.com/Pratham-Dabhane/portfolio-website.git
+cd portfolio-website
 ```
 
 2. Install dependencies:
@@ -43,14 +43,18 @@ npm install
 yarn install
 ```
 
-3. Run the development server:
+3. (Optional, for the contact form) Copy `.env.example` to `.env.local` and
+   set `NEXT_PUBLIC_FORMSPREE_ID` to your Formspree form ID. Without it the
+   form shows a “not configured” message instead of sending mail.
+
+4. Run the development server:
 ```bash
 npm run dev
 # or
 yarn dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Project Structure
 
@@ -58,24 +62,30 @@ yarn dev
 ├── app/
 │   ├── globals.css          # Global styles and Tailwind imports
 │   ├── layout.tsx           # Root layout component
-│   └── page.tsx             # Main page component
+│   ├── page.tsx             # Main page component
+│   └── not-found.tsx        # 404 page
 ├── components/
 │   ├── Navigation.tsx       # Navigation component
-│   ├── Hero.tsx            # Hero section
-│   ├── About.tsx           # About section
-│   ├── Projects.tsx        # Projects section
-│   └── Contact.tsx         # Contact section
-├── tailwind.config.js      # Tailwind CSS configuration
-├── next.config.js          # Next.js configuration
-└── package.json            # Dependencies and scripts
+│   ├── Hero.tsx             # Hero section
+│   ├── About.tsx            # About section
+│   ├── Projects.tsx         # Projects section
+│   ├── Contact.tsx          # Contact section
+│   ├── Cursor.tsx           # Custom cursor
+│   └── SmoothScroll.tsx     # Lenis smooth scrolling (provides useLenis)
+├── public/assets/           # Images served by Next.js
+├── tailwind.config.js       # Tailwind CSS configuration
+├── next.config.js           # Next.js configuration (static export)
+└── package.json             # Dependencies and scripts
 ```
 
 ## Customization
 
 ### Colors
 The color scheme can be customized in `tailwind.config.js`. The current setup uses:
-- Primary colors: Blue gradient (`primary-500` to `primary-600`)
-- Secondary colors: Gray scale (`secondary-50` to `secondary-900`)
+- Background: black (`bg`)
+- Surface: `#0A0A0A` (`surface`)
+- Accent: `#D1FF00` (`accent`)
+- Muted text: `#888888` (`muted`), dim text: `#555555` (`dim`)
 
 ### Content
 Update the content in each component file:
@@ -94,11 +104,13 @@ Update the content in each component file:
 ### Vercel (Recommended)
 1. Push your code to GitHub
 2. Connect your repository to Vercel
-3. Deploy automatically
+3. Set `NEXT_PUBLIC_FORMSPREE_ID` in the project environment variables if you want the contact form to work
+4. Deploy automatically
 
 ### Netlify
 1. Build the project: `npm run build`
 2. Deploy the `out` folder to Netlify
+3. Set `NEXT_PUBLIC_FORMSPREE_ID` in Site settings → Environment variables for the contact form
 
 ### Other Platforms
 The project can be deployed to any platform that supports Next.js static exports.

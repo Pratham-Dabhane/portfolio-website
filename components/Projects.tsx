@@ -86,7 +86,7 @@ export default function Projects() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.utils.toArray<HTMLElement>('.project-card').forEach((card, i) => {
+      gsap.utils.toArray<HTMLElement>('.project-card').forEach((card) => {
         gsap.from(card, {
           opacity: 0,
           y: 60,
@@ -127,19 +127,25 @@ export default function Projects() {
               className="glass-card overflow-hidden transition-all duration-500 h-full flex flex-col"
             >
               <div className="aspect-video relative overflow-hidden">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  className="parallax-img object-cover group-hover:scale-105 transition-transform duration-700"
-                />
+                {/* Parallax wrapper (taller than its container, see page.tsx).
+                    The hover scale stays on the Image itself, so GSAP no
+                    longer overwrites it. */}
+                <div className="parallax-img absolute inset-x-0 -top-[15%] h-[130%]">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 {/* Floating action */}
                 <a
                   href={project.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="absolute top-4 right-4 w-10 h-10 rounded-full border border-white/20 bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 -translate-y-2 group-hover:translate-y-0 transition-all duration-300"
+                  aria-label={`View live demo for ${project.title}`}
+                  className="absolute top-4 right-4 w-10 h-10 rounded-full border border-white/20 bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 focus:opacity-100 focus:translate-y-0 -translate-y-2 group-hover:translate-y-0 transition-all duration-300"
                   data-cursor
                 >
                   <ArrowUpRight className="w-4 h-4 text-white" />
@@ -202,12 +208,14 @@ export default function Projects() {
               className="glass-card overflow-hidden transition-all duration-500 h-full flex flex-col"
             >
               <div className="aspect-[4/3] relative overflow-hidden">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  className="parallax-img object-cover group-hover:scale-105 transition-transform duration-700"
-                />
+                <div className="parallax-img absolute inset-x-0 -top-[15%] h-[130%]">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
               </div>
 

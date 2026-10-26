@@ -5,34 +5,36 @@ import { Github, Linkedin, Mail, Instagram, ArrowDown } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import Image from 'next/image'
+import { useLenis } from './SmoothScroll'
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const nameRef = useRef<HTMLHeadingElement>(null)
+  const lenis = useLenis()
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (!element) return
+    if (lenis) {
+      lenis.scrollTo(element, { offset: -80 })
+    } else {
+      element.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Split and animate name letters
-      if (nameRef.current) {
-        const text = nameRef.current.textContent || ''
-        nameRef.current.innerHTML = text
-          .split('')
-          .map((char) =>
-            char === ' '
-              ? '<span class="inline-block">&nbsp;</span>'
-              : `<span class="inline-block opacity-0 translate-y-[100px]">${char}</span>`
-          )
-          .join('')
-
-        gsap.to(nameRef.current.querySelectorAll('span'), {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.05,
-          ease: 'power4.out',
-          delay: 0.3,
-        })
-      }
+      // Letters are rendered as spans in JSX below (not injected via
+      // innerHTML, which bypasses React). gsap.from() also means the name
+      // stays visible if GSAP ever fails to run, instead of starting
+      // at opacity-0 and never appearing.
+      gsap.from('.hero-letter', {
+        opacity: 0,
+        y: 100,
+        duration: 0.8,
+        stagger: 0.05,
+        ease: 'power4.out',
+        delay: 0.3,
+      })
 
       // Stagger other elements
       gsap.from('.hero-stagger', {
@@ -65,10 +67,14 @@ export default function Hero() {
           </div>
 
           <h1
-            ref={nameRef}
+            aria-label="PRATHAM"
             className="text-[clamp(3rem,8vw,7rem)] font-extrabold uppercase leading-[0.9] tracking-[-0.04em]"
           >
-            PRATHAM
+            {'PRATHAM'.split('').map((char, i) => (
+              <span key={i} aria-hidden="true" className="hero-letter inline-block">
+                {char === ' ' ? '\u00A0' : char}
+              </span>
+            ))}
           </h1>
 
           <p className="hero-stagger text-muted max-w-lg text-base md:text-lg leading-relaxed">
@@ -78,13 +84,13 @@ export default function Hero() {
 
           <div className="hero-stagger flex flex-wrap gap-4">
             <button
-              onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => scrollToSection('projects')}
               className="btn-primary"
             >
               View My Work
             </button>
             <button
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => scrollToSection('contact')}
               className="btn-ghost"
             >
               Get In Touch

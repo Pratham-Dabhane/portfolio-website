@@ -2,13 +2,11 @@
   "name": "pra-portfolio",
   "version": "1.0.0",
   "description": "Personal portfolio website",
-  "main": "index.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "export": "next build"
+    "lint": "next lint"
   },
   "dependencies": {
     "framer-motion": "^10.16.0",

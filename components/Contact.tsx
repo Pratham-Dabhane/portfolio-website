@@ -51,16 +51,41 @@ export default function Contact() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
+    // Clear a previous success/error banner as soon as the user starts a
+    // new message, so it does not linger across submissions.
+    setFormStatus((prev) => (prev.submitted ? { ...prev, submitted: false, message: '' } : prev))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setFormStatus((prev) => ({ ...prev, loading: true }))
+    setFormStatus({ submitted: false, success: false, message: '', loading: true })
+
+    // Formspree form ID comes from the environment, not hardcoded in the
+    // repo — otherwise every fork of this site sends mail to the original
+    // owner. Set NEXT_PUBLIC_FORMSPREE_ID in Vercel/Netlify (see
+    // .env.example). This is a NEXT_PUBLIC_ var because the site is a
+    // static export, so it is baked in at build time.
+    const formId = process.env.NEXT_PUBLIC_FORMSPREE_ID
+    if (!formId) {
+      setFormStatus({
+        submitted: true,
+        success: false,
+        message: 'Contact form is not configured yet. Please email me directly instead.',
+        loading: false,
+      })
+      return
+    }
 
     try {
-      const response = await fetch('https://formspree.io/f/xanewlkg', {
+      const response = await fetch(`https://formspree.io/f/${formId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          // Formspree only returns JSON errors when this is requested;
+          // without it, error details were lost and every failure looked
+          // identical.
+          Accept: 'application/json',
+        },
         body: JSON.stringify(formData),
       })
 
@@ -73,13 +98,17 @@ export default function Contact() {
         })
         setFormData({ name: '', email: '', message: '' })
       } else {
-        throw new Error('Failed to send message')
+        const data = await response.json().catch(() => null)
+        const detail = data?.errors?.map((err: { message?: string }) => err.message).filter(Boolean).join(' ')
+        throw new Error(detail || 'Failed to send message')
       }
-    } catch {
+    } catch (err) {
       setFormStatus({
         submitted: true,
         success: false,
-        message: 'Something went wrong. Please try again later.',
+        message: err instanceof Error && err.message !== 'Failed to send message'
+          ? err.message
+          : 'Something went wrong. Please try again later.',
         loading: false,
       })
     }
